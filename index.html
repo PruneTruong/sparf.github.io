@@ -1,0 +1,261 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+  <title>SPARF</title>
+</head>
+
+<body>
+  <div class="container">
+    <br>
+    <div style="text-align: center;">  
+      <h1>SPARF</h1>
+      <h3>Neural Radiance Fields from Sparse and Noisy Poses</h3>
+      <div style="margin-top: 15px;">
+        <span style="margin-right: 15px; font-size: 1.3em;"><a href="https://prunetruong.com/" target="_blank">Prune Truong<sup>1</sup></a></span>
+        <span style="margin-right: 15px; font-size: 1.3em;"><a href="http://www.lix.polytechnique.fr/Labo/Marie-Julie.RAKOTOSAONA/" target="_blank">Marie-Julie Rakotosaona<sup>2</sup></a></span>
+        <span style="margin-right: 15px; font-size: 1.3em;"><a href="https://campar.in.tum.de/Main/FabianManhardt" target="_blank">Fabian Manhardt<sup>2</sup></a></span>
+        <span style="margin-right: 15px; font-size: 1.3em;"><a href="https://federicotombari.github.io/" target="_blank">Federico Tombari<sup>2,3</sup></a></span
+      </div>
+      <div style="margin-top: 15px;">
+        <span style="margin-right: 20px; font-size: 1.2em;"><sup>1</sup>ETH Zurich</span>
+        <span style="margin-right: 20px; font-size: 1.2em;"><sup>2</sup>Google</span>
+        <span style="font-size: 1.2em;"><sup>3</sup>Technical University of Munich</span>
+      </div>
+      <div>
+        <span style="margin-right: 10px; font-size: 1.3em;">2023</span>
+      </div>
+    </div>
+
+    <div class="text-center" style="font-size: 1.5em; margin-top: 25px;">
+      <a class="btn btn-primary btn-lg" target="_blank"
+        href="https://arxiv.org/abs/2211.11738" role="button"
+        style="margin-right: 10px;  margin-bottom: 10px;">Arxiv</a>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12 col-sm-12 col-xs-12">
+	<div class="embed-responsive embed-responsive-16by9">
+        <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/FyLgaM_0HlA" allowfullscreen></iframe>
+      	</div>
+        <p class="text-center" style="font-size: 1.5em;">
+          <span style="font-weight: bold;">SPARF</span> enables realistic view synthesis from as few as <span style="font-weight: bold;">2 input
+          images with noisy poses</span>.
+        </p>
+      </div>
+    </div>
+
+    <div style="margin-top: 30px;">
+      <h2 class="text-center">
+        Abstract
+      </h2>
+      <p style="font-style: italic; margin-bottom: 5px;" class="text-left">
+        Neural Radiance Field (NeRF) has recently emerged as a powerful representation to synthesize 
+        photorealistic novel views. While showing impressive performance, it relies on the availability 
+        of  dense input views with highly accurate camera poses, thus limiting its application in 
+        real-world scenarios. In this work, we introduce Sparse Pose Adjusting Radiance Field (SPARF), 
+        to address the challenge of novel-view synthesis given only few wide-baseline input images 
+        (as low as 3) with noisy camera poses. Our approach exploits multi-view geometry constraints 
+        in order to jointly learn the NeRF and refine the camera poses. By relying on pixel 
+        matches extracted between the input views, our multi-view correspondence objective 
+        enforces the optimized scene and camera poses to converge to a global and geometrically 
+        accurate solution. Our depth consistency loss further encourages the reconstructed scene 
+        to be consistent from any viewpoint. Our approach  sets a new state of the art in the 
+        sparse-view regime on multiple challenging datasets. 
+      </p>
+      <p style="font-size: 1.2em; margin-top: 0px;" class="text-left">
+        <span style="font-weight: bold;" class="text-left">TL;DR:</span> We include additional geometric constraints during the NeRF
+        optimization to enable learning a meaningful geometry and rendering realistic novel views, given only 2 or 3
+        wide-baseline input views with noisy poses. 
+      </p>
+    </div>
+
+
+
+    <div style="margin-top: 50px;">
+      <div class="text-center">
+        <h2>
+          Method Overview
+        </h2>
+        <img src="method_fig.png" width=100% class="img-fluid" alt="Responsive image">
+      </div>
+      <div style="margin-top: 35px;" class="text-left">
+        <p>
+          Most previous NeRF-based approaches for joint pose-NeRF training optimizes the reconstruction loss 
+          for a given set of input images. For sparse inputs, however, this leads to degenerate solutions.
+
+          In this work, we propose <span style="font-weight: bold;">SPARF</span>, an approach for joint 
+          pose-NeRF training specifically designed to tackle the challenging scenario of  
+          <span style="font-weight: bold;">few input images</span> with 
+          <span style="font-weight: bold;">noisy camera pose</span> estimates. We first rely on a pretrained 
+          dense correspondence network to extract matches between the training views (step 1). Our 
+          <span style="font-weight: bold;">multi-view 
+          correspondence loss</span>  (step 2) minimizes the re-projection error between matches, i.e. it enforces each 
+          pixel of a particular training view to project to its matching pixel in another training view. 
+          We use the rendered NeRF depth and the current pose estimates to backproject 
+          each pixel in 3D space. This constraint hence encourages the learned scene and pose estimates to 
+          converge to a global and accurate geometric solution, consistent across all training views. 
+          Our <span style="font-weight: bold;">depth consistency loss</span> (step 3) further uses the rendered depths from the training viewpoints 
+          to create pseudo-depth supervision for unseen viewpoints, thereby encouraging the 
+          reconstructed scene to be consistent from any direction. 
+        </p>
+      </div>
+    </div>
+
+    <div style="margin-top:50px;">
+      <h2 class="text-center">
+        Results
+      </h2>
+      <h4 class="text-left" >View Synthesis on DTU from 3 Input Views with Noisy Camera Poses</h4>
+      <p class="text-left">
+        DTU is composed of complex object-centric scenes, with wide-baseline views spanning a half-hemisphere. 
+        We only have access to <span style="font-weight: bold;">3 input views</span>, along with <span style="font-weight: bold;">initial noisy camera poses</span>. We create these 
+        initial poses by synthetically perturbing the ground-truth camera poses with 15% of Gaussian noise. 
+        This leads to an initial rotation error of 15, and an initial translation error equal to 15% of the scene scale. 
+        <span style="font-weight: bold;">Our approach SPARF is the only one producing realistic novel-view renderings with a meaningful geometry!</span>
+      </p>
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12 gallery">
+          <div class="embed-responsive embed-responsive-21by9">
+            <video controls loop muted autoplay class="embed-responsive-item">
+              <source src="videos/subset_3/comparison_scan21.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12 gallery">
+          <div class="embed-responsive embed-responsive-21by9">
+            <video controls loop muted autoplay class="embed-responsive-item">
+              <source src="videos/subset_3/comparison_scan40.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12 gallery">
+          <div class="embed-responsive embed-responsive-21by9">
+            <video controls loop muted autoplay class="embed-responsive-item">
+              <source src="videos/subset_3/comparison_scan41.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12 gallery">
+          <div class="embed-responsive embed-responsive-21by9">
+            <video controls loop muted autoplay class="embed-responsive-item">
+              <source src="videos/subset_3/comparison_scan45.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12 gallery">
+          <div class="embed-responsive embed-responsive-21by9">
+            <video controls loop muted autoplay class="embed-responsive-item">
+              <source src="videos/subset_3/comparison_scan82.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12 gallery">
+          <div class="embed-responsive embed-responsive-21by9">
+            <video controls loop muted autoplay class="embed-responsive-item">
+              <source src="videos/subset_3/comparison_scan114.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+
+      <h4  class="text-left" >View Synthesis on LLFF from 3 Input Views with Noisy Camera Poses </h4>
+      <p class="text-left" >
+        LLFF is a forward-facing dataset, depicting complex indoor and outdoor scenes. 
+        We only have access to <span style="font-weight: bold;">3 input views</span>, along with initial <span style="font-weight: bold;">identity poses</span>.  
+        As before, our approach SPARF leads to much better-quality novel-view renderings, and learns an accurate geometry. 
+      </p>
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12 gallery">
+          <div class="embed-responsive embed-responsive-21by9">
+            <video controls loop muted autoplay class="embed-responsive-item">
+              <source src="videos/subset_3/comparison_horns.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12 gallery">
+          <div class="embed-responsive embed-responsive-21by9">
+            <video controls loop muted autoplay class="embed-responsive-item">
+              <source src="videos/subset_3/comparison_leaves.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+
+      <h4  class="text-left" >View Synthesis on Replica from 3 Input Views with Noisy Camera Poses </h4>
+      <p class="text-left" >
+        Replica is a non-forward facing dataset, depicting indoor scenes. 
+        We only have access to <span style="font-weight: bold;">3 input views</span>, along with <span style="font-weight: bold;">noisy poses initialized by COLMAP</span>.  
+        The scene geometry rendered by our approach SPARF is more accurate and realistic than competitor works BARF, DS-NeRF and SCNeRF. It contains significantly less floaters and inconsistencies. 
+      </p>
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12 gallery">
+          <div class="embed-responsive embed-responsive-21by9">
+            <video controls loop muted autoplay class="embed-responsive-item">
+              <source src="videos/subset_3/comparison_office0.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12 gallery">
+          <div class="embed-responsive embed-responsive-21by9">
+            <video controls loop muted autoplay class="embed-responsive-item">
+              <source src="videos/subset_3/comparison_room2.mp4" type="video/mp4">
+            </video>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="text-center" style="margin-top: 30px;">
+          Citation
+        </h2>
+        <p class="text-left">
+          If you want to cite our work, please use:
+        </p>
+        <pre class="text-left">
+        @InProceedings{sparf2023,
+          title={SPARF: Neural Radiance Fields from Sparse and Noisy Poses},
+          author = {Truong, Prune and Rakotosaona, Marie-Julie and Manhardt, Fabian and Tombari, Federico},
+          publisher = {arXiv},
+          year = {2022}
+      </pre>
+      </div>
+
+      <!-- Optional JavaScript -->
+      <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
+
